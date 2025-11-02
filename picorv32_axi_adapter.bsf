@@ -1,0 +1,212 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2023  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+*/
+(header "symbol" (version "1.1"))
+(symbol
+	(rect 16 16 304 288)
+	(text "picorv32_axi_adapter" (rect 5 0 91 12)(font "Arial" ))
+	(text "inst" (rect 8 256 20 268)(font "Arial" ))
+	(port
+		(pt 0 32)
+		(input)
+		(text "clk" (rect 0 0 10 12)(font "Arial" ))
+		(text "clk" (rect 21 27 31 39)(font "Arial" ))
+		(line (pt 0 32)(pt 16 32)(line_width 1))
+	)
+	(port
+		(pt 0 48)
+		(input)
+		(text "resetn" (rect 0 0 24 12)(font "Arial" ))
+		(text "resetn" (rect 21 43 45 55)(font "Arial" ))
+		(line (pt 0 48)(pt 16 48)(line_width 1))
+	)
+	(port
+		(pt 0 64)
+		(input)
+		(text "mem_axi_awready" (rect 0 0 77 12)(font "Arial" ))
+		(text "mem_axi_awready" (rect 21 59 98 71)(font "Arial" ))
+		(line (pt 0 64)(pt 16 64)(line_width 1))
+	)
+	(port
+		(pt 0 80)
+		(input)
+		(text "mem_axi_wready" (rect 0 0 73 12)(font "Arial" ))
+		(text "mem_axi_wready" (rect 21 75 94 87)(font "Arial" ))
+		(line (pt 0 80)(pt 16 80)(line_width 1))
+	)
+	(port
+		(pt 0 96)
+		(input)
+		(text "mem_axi_bvalid" (rect 0 0 66 12)(font "Arial" ))
+		(text "mem_axi_bvalid" (rect 21 91 87 103)(font "Arial" ))
+		(line (pt 0 96)(pt 16 96)(line_width 1))
+	)
+	(port
+		(pt 0 112)
+		(input)
+		(text "mem_axi_arready" (rect 0 0 75 12)(font "Arial" ))
+		(text "mem_axi_arready" (rect 21 107 96 119)(font "Arial" ))
+		(line (pt 0 112)(pt 16 112)(line_width 1))
+	)
+	(port
+		(pt 0 128)
+		(input)
+		(text "mem_axi_rvalid" (rect 0 0 64 12)(font "Arial" ))
+		(text "mem_axi_rvalid" (rect 21 123 85 135)(font "Arial" ))
+		(line (pt 0 128)(pt 16 128)(line_width 1))
+	)
+	(port
+		(pt 0 144)
+		(input)
+		(text "mem_axi_rdata[31..0]" (rect 0 0 87 12)(font "Arial" ))
+		(text "mem_axi_rdata[31..0]" (rect 21 139 108 151)(font "Arial" ))
+		(line (pt 0 144)(pt 16 144)(line_width 3))
+	)
+	(port
+		(pt 0 160)
+		(input)
+		(text "mem_valid" (rect 0 0 44 12)(font "Arial" ))
+		(text "mem_valid" (rect 21 155 65 167)(font "Arial" ))
+		(line (pt 0 160)(pt 16 160)(line_width 1))
+	)
+	(port
+		(pt 0 176)
+		(input)
+		(text "mem_instr" (rect 0 0 43 12)(font "Arial" ))
+		(text "mem_instr" (rect 21 171 64 183)(font "Arial" ))
+		(line (pt 0 176)(pt 16 176)(line_width 1))
+	)
+	(port
+		(pt 0 192)
+		(input)
+		(text "mem_addr[31..0]" (rect 0 0 68 12)(font "Arial" ))
+		(text "mem_addr[31..0]" (rect 21 187 89 199)(font "Arial" ))
+		(line (pt 0 192)(pt 16 192)(line_width 3))
+	)
+	(port
+		(pt 0 208)
+		(input)
+		(text "mem_wdata[31..0]" (rect 0 0 73 12)(font "Arial" ))
+		(text "mem_wdata[31..0]" (rect 21 203 94 215)(font "Arial" ))
+		(line (pt 0 208)(pt 16 208)(line_width 3))
+	)
+	(port
+		(pt 0 224)
+		(input)
+		(text "mem_wstrb[3..0]" (rect 0 0 68 12)(font "Arial" ))
+		(text "mem_wstrb[3..0]" (rect 21 219 89 231)(font "Arial" ))
+		(line (pt 0 224)(pt 16 224)(line_width 3))
+	)
+	(port
+		(pt 288 32)
+		(output)
+		(text "mem_axi_awvalid" (rect 0 0 71 12)(font "Arial" ))
+		(text "mem_axi_awvalid" (rect 196 27 267 39)(font "Arial" ))
+		(line (pt 288 32)(pt 272 32)(line_width 1))
+	)
+	(port
+		(pt 288 48)
+		(output)
+		(text "mem_axi_awaddr[31..0]" (rect 0 0 95 12)(font "Arial" ))
+		(text "mem_axi_awaddr[31..0]" (rect 172 43 267 55)(font "Arial" ))
+		(line (pt 288 48)(pt 272 48)(line_width 3))
+	)
+	(port
+		(pt 288 64)
+		(output)
+		(text "mem_axi_awprot[2..0]" (rect 0 0 89 12)(font "Arial" ))
+		(text "mem_axi_awprot[2..0]" (rect 178 59 267 71)(font "Arial" ))
+		(line (pt 288 64)(pt 272 64)(line_width 3))
+	)
+	(port
+		(pt 288 80)
+		(output)
+		(text "mem_axi_wvalid" (rect 0 0 67 12)(font "Arial" ))
+		(text "mem_axi_wvalid" (rect 200 75 267 87)(font "Arial" ))
+		(line (pt 288 80)(pt 272 80)(line_width 1))
+	)
+	(port
+		(pt 288 96)
+		(output)
+		(text "mem_axi_wdata[31..0]" (rect 0 0 89 12)(font "Arial" ))
+		(text "mem_axi_wdata[31..0]" (rect 178 91 267 103)(font "Arial" ))
+		(line (pt 288 96)(pt 272 96)(line_width 3))
+	)
+	(port
+		(pt 288 112)
+		(output)
+		(text "mem_axi_wstrb[3..0]" (rect 0 0 84 12)(font "Arial" ))
+		(text "mem_axi_wstrb[3..0]" (rect 183 107 267 119)(font "Arial" ))
+		(line (pt 288 112)(pt 272 112)(line_width 3))
+	)
+	(port
+		(pt 288 128)
+		(output)
+		(text "mem_axi_bready" (rect 0 0 71 12)(font "Arial" ))
+		(text "mem_axi_bready" (rect 196 123 267 135)(font "Arial" ))
+		(line (pt 288 128)(pt 272 128)(line_width 1))
+	)
+	(port
+		(pt 288 144)
+		(output)
+		(text "mem_axi_arvalid" (rect 0 0 69 12)(font "Arial" ))
+		(text "mem_axi_arvalid" (rect 198 139 267 151)(font "Arial" ))
+		(line (pt 288 144)(pt 272 144)(line_width 1))
+	)
+	(port
+		(pt 288 160)
+		(output)
+		(text "mem_axi_araddr[31..0]" (rect 0 0 93 12)(font "Arial" ))
+		(text "mem_axi_araddr[31..0]" (rect 174 155 267 167)(font "Arial" ))
+		(line (pt 288 160)(pt 272 160)(line_width 3))
+	)
+	(port
+		(pt 288 176)
+		(output)
+		(text "mem_axi_arprot[2..0]" (rect 0 0 87 12)(font "Arial" ))
+		(text "mem_axi_arprot[2..0]" (rect 180 171 267 183)(font "Arial" ))
+		(line (pt 288 176)(pt 272 176)(line_width 3))
+	)
+	(port
+		(pt 288 192)
+		(output)
+		(text "mem_axi_rready" (rect 0 0 70 12)(font "Arial" ))
+		(text "mem_axi_rready" (rect 197 187 267 199)(font "Arial" ))
+		(line (pt 288 192)(pt 272 192)(line_width 1))
+	)
+	(port
+		(pt 288 208)
+		(output)
+		(text "mem_ready" (rect 0 0 50 12)(font "Arial" ))
+		(text "mem_ready" (rect 217 203 267 215)(font "Arial" ))
+		(line (pt 288 208)(pt 272 208)(line_width 1))
+	)
+	(port
+		(pt 288 224)
+		(output)
+		(text "mem_rdata[31..0]" (rect 0 0 70 12)(font "Arial" ))
+		(text "mem_rdata[31..0]" (rect 197 219 267 231)(font "Arial" ))
+		(line (pt 288 224)(pt 272 224)(line_width 3))
+	)
+	(drawing
+		(rectangle (rect 16 16 272 256)(line_width 1))
+	)
+)
