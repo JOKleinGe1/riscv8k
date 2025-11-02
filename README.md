@@ -8,7 +8,7 @@ Status :
 
 simulation : ok 
 
-synthesis : in progress
+synthesis : ok
 
 Design for education purpose. 
 From JOKlein, Dept GEii-1,IUT Cachan, Univ Paris-Saclay. 
