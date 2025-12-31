@@ -28,31 +28,27 @@ GENERATED = $(OBJS) $(ELF) $(BIN) $(HEX) $(MEM) $(MIF) $(MAP) $(DUMP) $(VCD) $(V
 
 .PHONY: all clean 
 
-all: $(HEX) $(MEM) $(MIF)  $(DUMP) $(VCD)
+all: $(HEX)  $(DUMP) $(MEM) $(MIF) $(VCD)
 
 $(ELF): $(SRCS_C) $(SRCS_S)
 	@echo "1️⃣  Compilation 2️⃣  Edition de lien (linker) .s .c -> .elf"
 	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $^
 
 $(BIN): $(ELF)
-	@echo "3️⃣ -B  Transcription executable en Binaire (ASCII) .elf -> .bin"
+	@echo "3️⃣ -C  Transcription executable en Binaire (ASCII) .elf -> .bin"
 	$(OBJCOPY) -O binary $< $@
 
 $(HEX): $(ELF)
 	@echo "3️⃣ -A  Transcription executable en HEXA .elf -> .hex"
 	$(OBJCOPY) -O ihex $< $@
 
-# MEM: 32-bit little-endian words (pour $readmemh)
 $(MEM): $(BIN)
-	@echo "3️⃣ -C  Transcription executable pour Verilog-readmemh 32-bit little-endian .bin -> .mem"
+	@echo "3️⃣ -D  Transcription executable pour Verilog-readmemh 32-bit little-endian .bin -> .mem"
 	hexdump -v -e '4/1 "%02x " "\n"' $(BIN) | \
 	awk '{printf("%02s%02s%02s%02s\n", $$4, $$3, $$2, $$1)}' > $(MEM)
 
-# ---------------------------------------------------------------
-# Génération du fichier MIF (Quartus 32-bit words, little-endian)
-# ---------------------------------------------------------------
 $(MIF): $(BIN)
-	@echo "3️⃣ -D  Transcription executable pour Quartus .bin -> .mif"
+	@echo "3️⃣ -E  Transcription executable pour Quartus .bin -> .mif"
 	@echo "(Voir les commandes @echo du makefile pour l'entete du fichier > MIF)"
 	@echo "-- MIF file generated from $(BIN)"             >  $(MIF)
 	@echo "WIDTH=32;"                                    >> $(MIF)
@@ -73,7 +69,7 @@ $(MIF): $(BIN)
 	@echo "✅ Compilation logicielle OK."	
 
 $(DUMP): $(ELF)
-	@echo "3️⃣ -E  Deassemblage .elf -> .dump"
+	@echo "3️⃣ -B  Déassemblage de l'exécutable .elf -> .dump"
 	$(OBJDUMP) -D $(ELF) > $(DUMP)
 	
 $(VVP)  : $(VERILOG) $(MEM)
@@ -87,5 +83,6 @@ $(VCD) : $(VVP)
 	@echo " ▶️  Visualiser les chronogrammes : gtkwave  $(VCD)"
 
 clean:
-	@echo "🧹 Nettoyage des fichiers générés..."
+	@echo "🚮 Nettoyage des fichiers générés..."
 	rm -f $(GENERATED) ; rm -rf $(QUARTUS)
+	
