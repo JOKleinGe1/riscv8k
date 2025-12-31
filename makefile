@@ -4,7 +4,7 @@ AS      = $(CROSS_COMPILE)gcc
 OBJCOPY = $(CROSS_COMPILE)objcopy
 OBJDUMP = $(CROSS_COMPILE)objdump
 
-CFLAGS  = -march=rv32i -mabi=ilp32 -O2 -ffreestanding -fno-common -nostdlib -nostartfiles
+CFLAGS  = -march=rv32i -mabi=ilp32 -O2 -ffreestanding -fno-common 
 LDFLAGS = -T link.ld -nostdlib -nostartfiles
 
 SRCS_C  = test.c
@@ -13,7 +13,6 @@ OBJS    = $(SRCS_S:.S=.o) $(SRCS_C:.c=.o)
 
 ELF     = test.elf
 BIN     = test.bin
-HEX     = test.hex
 MEM     = test.mem
 MIF     = test.mif
 MAP     = test.map
@@ -24,31 +23,31 @@ VVP 	= tb_sys_picorv32.vvp
 TRACE	= trace.txt
 QUARTUS = db incremental_db output_files simulation *.qws 
 
-GENERATED = $(OBJS) $(ELF) $(BIN) $(HEX) $(MEM) $(MIF) $(MAP) $(DUMP) $(VCD) $(VVP)  $(TRACE) 
+GENERATED = $(OBJS) $(ELF) $(BIN) $(MEM) $(MIF) $(MAP) $(DUMP) $(VCD) $(VVP)  $(TRACE) 
 
 .PHONY: all clean 
 
-all: $(HEX)  $(DUMP) $(MEM) $(MIF) $(VCD)
+all: $(DUMP) $(MEM) $(MIF) $(VCD)
 
 $(ELF): $(SRCS_C) $(SRCS_S)
 	@echo "1️⃣  Compilation 2️⃣  Edition de lien (linker) .s .c -> .elf"
 	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $^
 
+$(DUMP): $(ELF)
+	@echo "3️⃣ -A  Déassemblage de l'exécutable .elf -> .dump"
+	$(OBJDUMP) -D $(ELF) > $(DUMP)
+	
 $(BIN): $(ELF)
-	@echo "3️⃣ -C  Transcription executable en Binaire (ASCII) .elf -> .bin"
+	@echo "3️⃣ -B  Transcription executable en Binaire (ASCII) .elf -> .bin"
 	$(OBJCOPY) -O binary $< $@
 
-$(HEX): $(ELF)
-	@echo "3️⃣ -A  Transcription executable en HEXA .elf -> .hex"
-	$(OBJCOPY) -O ihex $< $@
-
 $(MEM): $(BIN)
-	@echo "3️⃣ -D  Transcription executable pour Verilog-readmemh 32-bit little-endian .bin -> .mem"
+	@echo "3️⃣ -C  Transcription executable pour Verilog-readmemh 32-bit little-endian .bin -> .mem"
 	hexdump -v -e '4/1 "%02x " "\n"' $(BIN) | \
 	awk '{printf("%02s%02s%02s%02s\n", $$4, $$3, $$2, $$1)}' > $(MEM)
 
 $(MIF): $(BIN)
-	@echo "3️⃣ -E  Transcription executable pour Quartus .bin -> .mif"
+	@echo "3️⃣ -D  Transcription executable pour Quartus .bin -> .mif"
 	@echo "(Voir les commandes @echo du makefile pour l'entete du fichier > MIF)"
 	@echo "-- MIF file generated from $(BIN)"             >  $(MIF)
 	@echo "WIDTH=32;"                                    >> $(MIF)
@@ -68,13 +67,10 @@ $(MIF): $(BIN)
 	@echo "END;"                                         >> $(MIF)
 	@echo "✅ Compilation logicielle OK."	
 
-$(DUMP): $(ELF)
-	@echo "3️⃣ -B  Déassemblage de l'exécutable .elf -> .dump"
-	$(OBJDUMP) -D $(ELF) > $(DUMP)
-	
 $(VVP)  : $(VERILOG) $(MEM)
 	@echo "4️⃣  Compilation sources verilog (incluant .mem) .v -> .vvp"
 	iverilog  -o $@  $(VERILOG) 
+	
 $(VCD) : $(VVP)
 	@echo "5️⃣  Simulation verilog .vvp -> .vcd"
 	vvp   $^ > $(TRACE) 
