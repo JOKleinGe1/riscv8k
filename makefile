@@ -27,18 +27,18 @@ GENERATED = $(OBJS) $(ELF) $(BIN) $(MEM) $(MIF) $(MAP) $(DUMP) $(VCD) $(VVP)  $(
 
 .PHONY: all clean 
 
-all: $(DUMP) $(MEM) $(MIF) $(VCD)
+all: $(BIN) $(DUMP) $(MEM) $(MIF) $(VCD)
 
 $(ELF): $(SRCS_C) $(SRCS_S)
 	@echo "1️⃣  Compilation 2️⃣  Edition de lien (linker) .s .c -> .elf"
 	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $^
 
 $(DUMP): $(ELF)
-	@echo "3️⃣ -A  Déassemblage de l'exécutable .elf -> .dump"
+	@echo "3️⃣ -B  Déassemblage de l'exécutable .elf -> .dump"
 	$(OBJDUMP) -D $(ELF) > $(DUMP)
 	
 $(BIN): $(ELF)
-	@echo "3️⃣ -B  Transcription executable en Binaire (ASCII) .elf -> .bin"
+	@echo "3️⃣ -A  Transcription executable en Binaire .elf -> .bin"
 	$(OBJCOPY) -O binary $< $@
 
 $(MEM): $(BIN)
