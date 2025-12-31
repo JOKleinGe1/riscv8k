@@ -26,9 +26,9 @@ QUARTUS = db incremental_db output_files simulation *.qws
 
 GENERATED = $(OBJS) $(ELF) $(BIN) $(HEX) $(MEM) $(MIF) $(MAP) $(DUMP) $(VCD) $(VVP)  $(TRACE) 
 
-.PHONY: all clean dump
+.PHONY: all clean 
 
-all: $(HEX) $(MEM) $(MIF) $(VCD)
+all: $(HEX) $(MEM) $(MIF)  $(DUMP) $(VCD)
 
 $(ELF): $(SRCS_C) $(SRCS_S)
 	@echo "1️⃣  Compilation 2️⃣  Edition de lien (linker) .s .c -> .elf"
@@ -52,7 +52,7 @@ $(MEM): $(BIN)
 # Génération du fichier MIF (Quartus 32-bit words, little-endian)
 # ---------------------------------------------------------------
 $(MIF): $(BIN)
-	@echo "3️⃣-D  Transcription executable pour Quartus .bin -> .mif"
+	@echo "3️⃣ -D  Transcription executable pour Quartus .bin -> .mif"
 	@echo "(Voir les commandes @echo du makefile pour l'entete du fichier > MIF)"
 	@echo "-- MIF file generated from $(BIN)"             >  $(MIF)
 	@echo "WIDTH=32;"                                    >> $(MIF)
@@ -70,18 +70,20 @@ $(MIF): $(BIN)
 	  echo "printf \"[$$LAST_ADDR .. 8191] : 00000000;\" >> $(MIF);"; \
 	fi
 	@echo "END;"                                         >> $(MIF)
+	@echo "✅ Compilation logicielle OK."	
 
 $(DUMP): $(ELF)
+	@echo "3️⃣ -E  Deassemblage .elf -> .dump"
 	$(OBJDUMP) -D $(ELF) > $(DUMP)
 	
 $(VVP)  : $(VERILOG) $(MEM)
-	@echo "4️⃣  Compilation sources verilog (inclut .mem) .v -> .vvp"
+	@echo "4️⃣  Compilation sources verilog (incluant .mem) .v -> .vvp"
 	iverilog  -o $@  $(VERILOG) 
 $(VCD) : $(VVP)
 	@echo "5️⃣  Simulation verilog .vvp -> .vcd"
 	vvp   $^ > $(TRACE) 
-	@echo "✅ : $(VCD)"
-	@echo " ▶️  Visualiser les traces : more  $(TRACE)"
+	@echo "✅ Simulation verilog OK : cycles bus > $(TRACE), chronogrammes > $(VCD)"
+	@echo " ▶️  Visualiser les traces des cycles bus : more  $(TRACE)"
 	@echo " ▶️  Visualiser les chronogrammes : gtkwave  $(VCD)"
 
 clean:
