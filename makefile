@@ -53,7 +53,7 @@ $(MEM): $(BIN)
 # ---------------------------------------------------------------
 $(MIF): $(BIN)
 	@echo "3️⃣-D  Transcription executable pour Quartus .bin -> .mif"
-	@echo "Voir makefile pour les commandes"
+	@echo "(Voir les commandes @echo du makefile pour l'entete du fichier > MIF)"
 	@echo "-- MIF file generated from $(BIN)"             >  $(MIF)
 	@echo "WIDTH=32;"                                    >> $(MIF)
 	@echo "DEPTH=8192;"                                  >> $(MIF)
@@ -61,12 +61,13 @@ $(MIF): $(BIN)
 	@echo "DATA_RADIX=HEX;"                              >> $(MIF)
 	@echo "CONTENT BEGIN"                                >> $(MIF)
 	@# Génère les mots little-endian (4 octets → 1 mot)
-	@hexdump -v -e '4/1 "%02x " "\n"' $(BIN) | \
+	hexdump -v -e '4/1 "%02x " "\n"' $(BIN) | \
 	awk '{printf("%04X : %02s%02s%02s%02s;\n", NR-1, $$4, $$3, $$2, $$1)}' >> $(MIF)
 	@# Calcule la dernière adresse utilisée et ajoute le remplissage à zéro
 	@LAST_ADDR=$$(expr `wc -c < $(BIN)` / 4); \
 	if [ $$LAST_ADDR -lt 8192 ]; then \
 	  printf "[%04X .. %04X] : 00000000;\n" $$LAST_ADDR 8191 >> $(MIF); \
+	  echo "printf \"[$$LAST_ADDR .. 8191] : 00000000;\" >> $(MIF);"; \
 	fi
 	@echo "END;"                                         >> $(MIF)
 
@@ -80,8 +81,8 @@ $(VCD) : $(VVP)
 	@echo "5️⃣  Simulation verilog .vvp -> .vcd"
 	vvp   $^ > $(TRACE) 
 	@echo "✅ : $(VCD)"
-	@echo "▶️ Visualiser les traces : more  $(TRACE)"
-	@echo "▶️ Visualiser les chronogrammes : gtkwave  $(VCD)"
+	@echo " ▶️  Visualiser les traces : more  $(TRACE)"
+	@echo " ▶️  Visualiser les chronogrammes : gtkwave  $(VCD)"
 
 clean:
 	@echo "🧹 Nettoyage des fichiers générés..."
