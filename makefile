@@ -30,36 +30,30 @@ GENERATED = $(OBJS) $(ELF) $(BIN) $(HEX) $(MEM) $(MIF) $(MAP) $(DUMP) $(VCD) $(V
 
 all: $(HEX) $(MEM) $(MIF) $(VCD)
 
-# Link
-$(ELF): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJS)
+$(ELF): $(SRCS_C) $(SRCS_S)
+	@echo "1️⃣  Compilation 2️⃣  Edition de lien (linker) .s .c -> .elf"
+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $^
 
-%.o: %.S
-	$(AS) $(CFLAGS) -c $< -o $@
-
-# Compile .c
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# ELF -> BIN/HEX
 $(BIN): $(ELF)
+	@echo "3️⃣ -B  Transcription executable en Binaire (ASCII) .elf -> .bin"
 	$(OBJCOPY) -O binary $< $@
 
 $(HEX): $(ELF)
+	@echo "3️⃣ -A  Transcription executable en HEXA .elf -> .hex"
 	$(OBJCOPY) -O ihex $< $@
 
 # MEM: 32-bit little-endian words (pour $readmemh)
 $(MEM): $(BIN)
-	@echo "Génération du fichier MEM (Verilog 32-bit LE)..."
-	@hexdump -v -e '4/1 "%02x " "\n"' $(BIN) | \
+	@echo "3️⃣ -C  Transcription executable pour Verilog-readmemh 32-bit little-endian .bin -> .mem"
+	hexdump -v -e '4/1 "%02x " "\n"' $(BIN) | \
 	awk '{printf("%02s%02s%02s%02s\n", $$4, $$3, $$2, $$1)}' > $(MEM)
-	@echo "✅ $(MEM)"
 
 # ---------------------------------------------------------------
 # Génération du fichier MIF (Quartus 32-bit words, little-endian)
 # ---------------------------------------------------------------
 $(MIF): $(BIN)
-	@echo "Génération du fichier MIF (Quartus 32-bit, little-endian)..."
+	@echo "3️⃣-D  Transcription executable pour Quartus .bin -> .mif"
+	@echo "Voir makefile pour les commandes"
 	@echo "-- MIF file generated from $(BIN)"             >  $(MIF)
 	@echo "WIDTH=32;"                                    >> $(MIF)
 	@echo "DEPTH=8192;"                                  >> $(MIF)
@@ -75,15 +69,19 @@ $(MIF): $(BIN)
 	  printf "[%04X .. %04X] : 00000000;\n" $$LAST_ADDR 8191 >> $(MIF); \
 	fi
 	@echo "END;"                                         >> $(MIF)
-	@echo "✅ Fichier MIF généré (32-bit LE, complété à 0x2000) : $(MIF)"
 
-dump: $(ELF)
+$(DUMP): $(ELF)
 	$(OBJDUMP) -D $(ELF) > $(DUMP)
 	
-tb_sys_picorv32.vvp  :  $(VERILOG) $(MEM)
+$(VVP)  : $(VERILOG) $(MEM)
+	@echo "4️⃣  Compilation sources verilog (inclut .mem) .v -> .vvp"
 	iverilog  -o $@  $(VERILOG) 
-tb_sys_picorv32.vcd :tb_sys_picorv32.vvp
+$(VCD) : $(VVP)
+	@echo "5️⃣  Simulation verilog .vvp -> .vcd"
 	vvp   $^ > $(TRACE) 
+	@echo "✅ : $(VCD)"
+	@echo "▶️ Visualiser les traces : more  $(TRACE)"
+	@echo "▶️ Visualiser les chronogrammes : gtkwave  $(VCD)"
 
 clean:
 	@echo "🧹 Nettoyage des fichiers générés..."
