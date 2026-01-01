@@ -62,8 +62,8 @@ $(MIF): $(BIN)
 	awk '{printf("%04X : %02s%02s%02s%02s;\n", NR-1, $$4, $$3, $$2, $$1)}' >> $(MIF)
 	@# Calcule la dernière adresse utilisée et ajoute le remplissage à zéro
 	@LAST_ADDR=$$(expr `wc -c < $(BIN)` / 4); \
-	if [ $$LAST_ADDR -lt 07FF ]; then \
-	  printf "[%04X .. %04X] : 00000000;\n" $$LAST_ADDR 07FF >> $(MIF); \
+	if [ $$LAST_ADDR -lt 2047 ]; then \
+	  printf "[%04X .. %04X] : 00000000;\n" $$LAST_ADDR 2047 >> $(MIF); \
 	  echo "printf \"[$$LAST_ADDR .. 07FF] : 00000000;\" >> $(MIF);"; \
 	fi
 	@echo "END;"                                         >> $(MIF)
