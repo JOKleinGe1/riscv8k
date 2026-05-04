@@ -83,8 +83,11 @@ $(VCD) : $(VVP)
 
 sof : 
 	quartus_sh --flow compile $(QPF)
+	cp riscv.cdf  $(CDF)
 
 fpga : $(CDF) 
+	jtagconfig
+
 	quartus_pgm -c 1 $(CDF)
 
 clean:
